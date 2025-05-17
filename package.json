@@ -1,11 +1,12 @@
 {
-  "name": "App",
+  "name": "app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
+    "build": "npx prisma generate && npx prisma migrate deploy",
     "frontend": "cd client && npm run start",
     "dev": "concurrently \"npm run server\" \"npm run frontend\"",
     "buildClient": "cd client && npm run build"

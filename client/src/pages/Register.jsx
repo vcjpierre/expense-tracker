@@ -80,7 +80,7 @@ const Register = () => {
           <button type="submit">Register Now</button>
         </div>
         <Link to="/auth" style={{ textAlign: "center" }}>
-          Already have and acc ?
+          Already have and account?
         </Link>
       </form>
       {(validating || registering || loggingIn) && <Spinner fullPage />}

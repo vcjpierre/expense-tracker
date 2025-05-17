@@ -17,6 +17,7 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
+import Wallet from "./pages/Wallet";
 import TransactionsRoot from "./pages/TransactionsRoot";
 //TRANSACTIONS SUBPAGES
 import TransactionCreate from "./components/TransactionComponents/TransactionCreate";
@@ -53,6 +54,8 @@ function App() {
                 <Route path="settings" element={<Settings />} />
                 {/* PROFILE */}
                 <Route path="profile" element={<Profile />} />
+                {/* WALLET */}
+                <Route path="wallet" element={<Wallet />} />                
                 {/* TRANSACTIONS */}
                 <Route path="transactions" element={<TransactionsRoot />}>
                   <Route index element={<TransactionCreate />} />

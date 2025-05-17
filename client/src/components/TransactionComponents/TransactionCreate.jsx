@@ -76,7 +76,7 @@ const TransactionDelete = () => {
         <input
           type="number"
           step={0.01}
-          placeholder="* Money"
+          placeholder="* Amount"
           {...register("money")}
         />
         <Error error={formErrors?.money?.message} />

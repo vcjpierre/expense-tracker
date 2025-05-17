@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import MainContainer from "../components/Containers/MainContainer";
 import { Title } from "../components/Titles/Titles";
 import { useUser, useUserUpdate, useUserDelete } from "../queries/user";
@@ -69,7 +70,7 @@ const Profile = () => {
             </div>
             {/* BUTTON */}
             <button onClick={() => UserUpdate(body)} disabled={userUpdating}>
-              {userUpdating ? "Updating..." : "Update Info!"}
+              {userUpdating ? "Updating..." : "Update Info"}
             </button>
             {userUpdated && (
               <div style={{ marginTop: "1rem", color: "green" }}>Success</div>

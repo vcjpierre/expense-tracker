@@ -57,7 +57,7 @@ const Auth = () => {
           </button>
         </div>
         <Link style={{ textAlign: "center" }} to="/register">
-          Don't have an acc ?
+          Don't have an account?
         </Link>
         {isError && (
           <p style={{ color: "red", textAlign: "center" }}>
