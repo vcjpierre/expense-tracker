@@ -30,7 +30,8 @@ app.use(
     origin: [
       "http://localhost:3006",
       "https://localhost:5000",
-      "https://better-tracker-app.onrender.com/",
+      "https://expense-tracker-snowy-eta.vercel.app/",
+      "https://expense-tracker-production-7e31.up.railway.app"
     ],
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE", "PATCH"],
     credentials: true,
