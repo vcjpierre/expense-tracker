@@ -42,9 +42,13 @@ app.use(
 app.use(
   expressSession({
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      ...(process.env.NODE_ENV === "production"
+        ? { domain: ".railway.app" }
+        : {}),
+      maxAge: 1000 * 60 * 60 * 24,
     },
     secret: "a santa at nasa",
     resave: true,
