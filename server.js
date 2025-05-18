@@ -46,7 +46,7 @@ app.use(
       secure: true,
       sameSite: "None",
       ...(process.env.NODE_ENV === "production"
-        ? { domain: "https://expense-tracker-production-7e31.up.railway.app/" }
+        ? { domain: "expense-tracker-production-7e31.up.railway.app" }
         : {}),
       maxAge: 1000 * 60 * 60 * 24,
     },
