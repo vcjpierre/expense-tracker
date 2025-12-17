@@ -9,6 +9,7 @@ import Spinner from "../components/Spinner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useState } from "react";
 
 const Error = ({ error }) => {
   return (
@@ -19,11 +20,12 @@ const Error = ({ error }) => {
 const Register = () => {
   const { mutateAsync: loginHandler, isLoading: loggingIn } = useLoginUser();
   const { mutate: registerUser, isLoading: registering } = useRegisterUser();
+  const [serverError, setServerError] = useState("");
 
   const schema = z.object({
     firstName: z
       .string()
-      .min(2, { message: "First name must be at lest 2 characters" })
+      .min(2, { message: "First name must be at least 2 characters" })
       .max(20, { message: "First name must be at most 20 characters" }),
     lastName: z
       .string()
@@ -38,6 +40,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isValidating: validating },
   } = useForm({
     resolver: zodResolver(schema),
@@ -48,17 +51,43 @@ const Register = () => {
       {/* REGISTER FORM */}
       <form
         action="submit"
-        onSubmit={handleSubmit((d) =>
+        onSubmit={handleSubmit((d) => {
+          setServerError("");
           registerUser(d, {
             onSuccess: async () => {
+              setServerError("");
               await loginHandler({
                 email: d.email,
                 password: d.password,
               });
               queryClient.invalidateQueries("user");
             },
-          })
-        )}
+            onError: (err) => {
+              const status = err?.response?.status;
+              if (status === 409) {
+                setError("email", {
+                  type: "server",
+                  message: "Email already exists",
+                });
+                return;
+              }
+
+              const message = err?.response?.data?.message;
+              if (message) {
+                setServerError(message);
+                return;
+              }
+
+              const apiErrors = err?.response?.data?.errors;
+              if (Array.isArray(apiErrors) && apiErrors[0]?.message) {
+                setServerError(apiErrors[0].message);
+                return;
+              }
+
+              setServerError("Something went wrong. Please try again.");
+            },
+          });
+        })}
         className={styles.registerForm}
       >
         <div className={styles.container}>
@@ -75,6 +104,8 @@ const Register = () => {
           <span>Password :</span>
           <input type="password" {...register("password")} />
           <Error error={errors?.password?.message} />
+
+          <Error error={serverError} />
 
           {/* REGISTER BTN */}
           <button type="submit">Register Now</button>

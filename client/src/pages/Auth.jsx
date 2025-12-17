@@ -61,7 +61,12 @@ const Auth = () => {
         </Link>
         {isError && (
           <p style={{ color: "red", textAlign: "center" }}>
-            {JSON.stringify(error?.response?.data?.message)}
+            {(() => {
+              const message = error?.response?.data?.message;
+              return typeof message === "string"
+                ? message
+                : JSON.stringify(message);
+            })()}
           </p>
         )}
       </form>

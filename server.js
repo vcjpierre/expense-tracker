@@ -17,6 +17,11 @@ import prisma from "./constats/config.js";
 const app = express();
 const port = process.env.SERVER_PORT || 5000;
 
+if (process.env.NODE_ENV === "production") {
+  // Needed when running behind a proxy (e.g. Railway) so secure cookies work
+  app.set("trust proxy", 1);
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -43,8 +48,8 @@ app.use(
   expressSession({
     cookie: {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       ...(process.env.NODE_ENV === "production"
         ? { domain: "expense-tracker-production-7e31.up.railway.app" }
         : {}),

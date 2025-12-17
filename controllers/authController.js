@@ -63,10 +63,13 @@ const auth_register = async (req, res) => {
     });
   } catch {
     res.status(500).json({ message: "Something went wrong" });
+    return;
   }
 
-  if (emailCheck) res.status(500).json({ message: "Email already exists" });
-  else {
+  if (emailCheck) {
+    res.status(409).json({ message: "Email already exists" });
+    return;
+  } else {
     const saltRounds = 10;
     let salted_password = await bcrypt.hash(password, saltRounds);
     let newUser;
@@ -101,6 +104,10 @@ const auth_register = async (req, res) => {
       res.status(200).json({ userId: newUser.id });
     } catch (e) {
       console.log(e);
+      if (e?.code === "P2002") {
+        res.status(409).json({ message: "Email already exists" });
+        return;
+      }
       res.status(500).json({ message: "Something Went Wrong" });
       return;
     }

@@ -8,7 +8,7 @@ const SetupInterceptor = () => {
     async (error) => {
       if (error?.response?.status === 401) {
         queryClient.refetchQueries("user");
-        Promise.reject(error);
+        return Promise.reject(error);
       } else {
         return Promise.reject(error);
       }
