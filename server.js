@@ -15,7 +15,7 @@ import categoriesRoutes from "./routes/categoriesRoutes.js";
 import prisma from "./constats/config.js";
 
 const app = express();
-const port = process.env.SERVER_PORT || 5000;
+const port = process.env.PORT || 5000;
 
 if (process.env.NODE_ENV === "production") {
   // Needed when running behind a proxy (e.g. Railway) so secure cookies work
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//SERVER CLIENT FOLDER IE REACT BUILD
+//SERVER CLIENT FOLDER IE REACT BUILDA
 app.use(express.static(path.join(__dirname, "clientBuild")));
 
 //CORS
@@ -49,17 +49,14 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      ...(process.env.NODE_ENV === "production"
-        ? { domain: "expense-tracker-production-7e31.up.railway.app" }
-        : {}),
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24,
     },
-    secret: "a santa at nasa",
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
     store: new PrismaSessionStore(prisma, {
-      checkPeriod: 2 * 60 * 1000, //ms
+      checkPeriod: 2 * 60 * 1000,
       dbRecordIdIsSessionId: true,
       dbRecordIdFunction: undefined,
     }),
@@ -73,10 +70,10 @@ app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", transactionRoutes);
 app.use("/api", categoriesRoutes);
-app.get("/*", (req, res) => {
+app.get("/*splat", (req, res) => {
   res.sendFile(path.join(__dirname, "clientBuild", "index.html"));
 });
 
 app.listen(port, () => {
-  console.log(`SERVER STARTED: http://localhost:${port}`);
-});
+  console.log(`SERVER STARTED ON PORT: ${port}`);
+});;
